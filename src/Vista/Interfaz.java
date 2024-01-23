@@ -5,7 +5,14 @@
  */
 package Vista;
 
+import Servidor.ClienteUDP2;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,13 +20,47 @@ import java.awt.event.KeyEvent;
  */
 public class Interfaz extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Interfaz
-     */
-    public Interfaz() {
-        initComponents();
+    
+    String nombreUsuario;
+    LocalDate hora;
+    ClienteUDP2 cliente = new ClienteUDP2();
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+    
+    
+    
+    
+    public Interfaz(String usuario) {
+        
+        initComponents();
+        inicio();
+        nombreUsuario = usuario;
+    }
+    
+    
+    
+    public void escribirText(String nombreCliente, String mensaje){
+        hora = LocalDate.now();
+       String textoAnterior = conversacion.getText();
+       String textoFinal = textoAnterior + "\n" + "[" + nombreCliente + " " + this.hora.toString()  + "]  " + mensaje;
+       conversacion.setText(textoFinal);
+        
+    }
+    
+    
+    public void inicio(){
+        conversacion.setEditable(false);
+        RecibidorMensajes recibidor = new RecibidorMensajes(this);
+        recibidor.start();
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,7 +127,7 @@ public class Interfaz extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -101,13 +142,18 @@ public class Interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
+        escribirText("Tú", mensaje.getText());
+        try {
+            cliente.enviarMensaje("[" + nombreUsuario + " " + this.hora.toString()  + "]" + " " + mensaje.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
         mensaje.setText("");
-
-
     }//GEN-LAST:event_botonEnviarActionPerformed
 
     private void botonEnviarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_botonEnviarKeyPressed
-        // TODO add your handling code here:
+
+
     }//GEN-LAST:event_botonEnviarKeyPressed
 
     private void mensajeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mensajeKeyPressed
@@ -148,7 +194,7 @@ public class Interfaz extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Interfaz().setVisible(true);
+                new Interfaz("a").setVisible(true);
                 
             }
         });
