@@ -45,10 +45,10 @@ public class Interfaz extends javax.swing.JFrame {
     
     
     
-    public void escribirText(String nombreCliente, String mensaje){
+    public void escribirText(String nombreCliente, String mensaje, boolean escribidor){
         hora = LocalDate.now();
        String textoAnterior = conversacion.getText();
-       String textoFinal = textoAnterior + "\n" + "[" + nombreCliente + " " + this.hora.toString()  + "]  " + mensaje;
+       String textoFinal = textoAnterior  +  "\n" + (escribidor ? "[" + nombreCliente + " " + this.hora.toString() + " ]" :  " " )  + mensaje;
        conversacion.setText(textoFinal);
         
     }
@@ -142,7 +142,7 @@ public class Interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
-        escribirText("Tú", mensaje.getText());
+        escribirText("Tú", mensaje.getText(), true);
         try {
             cliente.enviarMensaje("[" + nombreUsuario + " " + this.hora.toString()  + "]" + " " + mensaje.getText());
         } catch (IOException ex) {

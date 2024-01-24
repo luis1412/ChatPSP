@@ -19,68 +19,50 @@ import java.net.SocketException;
  */
 public class ClienteUDP2 {
 
-    public static void main(String args[]) throws Exception {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        DatagramSocket clientSocket = new DatagramSocket();
-        byte[] buffer = new byte[1024];
+  public static void main(String args[]) throws Exception {
+    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    DatagramSocket clientSocket = new DatagramSocket();
+    byte[] buffer = new byte[1024];
 
-        InetAddress serverAddress = InetAddress.getLocalHost();
-        int serverPort = 9876;
+    InetAddress serverAddress = InetAddress.getLocalHost();
+    int serverPort = 9876;
 
-        // Registro del cliente al servidor
-        String registrationMessage = "REGISTER";
-        buffer = registrationMessage.getBytes();
-        DatagramPacket registrationPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
-        clientSocket.send(registrationPacket);
 
-        while (true) {
-            System.out.print("Enter message (type 'exit' to quit): ");
-            String message = in.readLine();
-
-            if (message.equalsIgnoreCase("exit")) {
-                break;
-            }
-
-            buffer = message.getBytes();
-            DatagramPacket sendPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
-            clientSocket.send(sendPacket);
-
-            // Receive and display response from the server
-            DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
-            clientSocket.receive(receivePacket);
-            String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
-            System.out.println("Server response: " + receivedMessage);
-        }
-
-        clientSocket.close();
+      // Receive and display response from the server
+      DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+      clientSocket.receive(receivePacket);
+      String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
+      System.out.println("Server response: " + receivedMessage);
     }
 
 
+  public void enviarMensaje(String message) throws SocketException, IOException {
 
-    public void enviarMensaje(String message) throws SocketException, IOException {
+    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    DatagramSocket clientSocket = new DatagramSocket();
+    byte[] buffer = new byte[1024];
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        DatagramSocket clientSocket = new DatagramSocket();
-        byte[] buffer = new byte[2048];
+    InetAddress serverAddress = InetAddress.getLocalHost();
+    int serverPort = 9876;
 
-        InetAddress serverAddress = InetAddress.getLocalHost();
-        int serverPort = 9876;
+    // Registro del cliente al servidor
+    String registrationMessage = "REGISTER";
+    buffer = registrationMessage.getBytes();
+    DatagramPacket registrationPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
+    clientSocket.send(registrationPacket);
 
-        // Registro del cliente al servidor
-        String registrationMessage = "REGISTER";
-        buffer = registrationMessage.getBytes();
-        DatagramPacket registrationPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
-        clientSocket.send(registrationPacket);
+    buffer = message.getBytes();
+    DatagramPacket sendPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
+    clientSocket.send(sendPacket);
 
-        buffer = message.getBytes();
-        DatagramPacket sendPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
-        clientSocket.send(sendPacket);
-
-        // Receive and display response from the server
-        DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
-        clientSocket.receive(receivePacket);
-        String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
-        System.out.println("Server response: " + receivedMessage);
-    }
+    // Receive and display response from the server
+    DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+    clientSocket.receive(receivePacket);
+    String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
+    System.out.println("Server response: " + receivedMessage);
+    
+    
+    clientSocket.close();
+  }
 
 }

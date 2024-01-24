@@ -40,7 +40,6 @@ public class ServidorUDP2 {
                 DatagramPacket registrationAckPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
                 serverSocket.send(registrationAckPacket);
             } else {
-                
                     MulticastSocket ms = new MulticastSocket();
                     // Se escoge un puerto para el server
                     int puerto = 12345;
