@@ -61,7 +61,7 @@ public class ClienteUDP2 {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         DatagramSocket clientSocket = new DatagramSocket();
-        byte[] buffer = new byte[2028];
+        byte[] buffer = new byte[2048];
 
         InetAddress serverAddress = InetAddress.getLocalHost();
         int serverPort = 9876;

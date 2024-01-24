@@ -46,7 +46,7 @@ public class RecibidorMensajes extends Thread{
         while (true) {
             // El buffer se crea dentro del bucle para que se sobrescriba
             // con cada nuevo mensaje
-            byte[] buf = new byte[1000];
+            byte[] buf = new byte[2048];
             DatagramPacket paquete = new DatagramPacket(buf, buf.length);
             //Recibe el paquete del servidor multicast
             ms.receive(paquete);
