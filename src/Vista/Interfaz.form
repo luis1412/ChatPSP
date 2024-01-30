@@ -79,11 +79,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="\ud83d\udcf7" containsInvalidXMLChars="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonImagenActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="botonDocumento">
       <Properties>
         <Property name="text" type="java.lang.String" value="\ud83d\udcd4" containsInvalidXMLChars="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonDocumentoActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>

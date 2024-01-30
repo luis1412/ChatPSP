@@ -4,13 +4,10 @@
  */
 package Servidor;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.net.SocketException;
 
 /**
@@ -20,9 +17,8 @@ import java.net.SocketException;
 public class ClienteUDP2 {
 
   public static void main(String args[]) throws Exception {
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     DatagramSocket clientSocket = new DatagramSocket();
-    byte[] buffer = new byte[1024];
+    byte[] buffer = new byte[4096];
 
     InetAddress serverAddress = InetAddress.getLocalHost();
     int serverPort = 9876;
@@ -38,19 +34,19 @@ public class ClienteUDP2 {
 
   public void enviarMensaje(String message) throws SocketException, IOException {
 
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     DatagramSocket clientSocket = new DatagramSocket();
-    byte[] buffer = new byte[1024];
+    byte[] buffer;
+    byte[] buffer2 = new byte[4096];
 
     InetAddress serverAddress = InetAddress.getLocalHost();
     int serverPort = 9876;
-
     // Registro del cliente al servidor
     String registrationMessage = "REGISTER";
-    buffer = registrationMessage.getBytes();
-    DatagramPacket registrationPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
+    buffer2 = registrationMessage.getBytes();
+    DatagramPacket registrationPacket = new DatagramPacket(buffer2, buffer2.length, serverAddress, serverPort);
     clientSocket.send(registrationPacket);
 
+    buffer = new byte[message.getBytes().length];
     buffer = message.getBytes();
     DatagramPacket sendPacket = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
     clientSocket.send(sendPacket);
@@ -61,8 +57,9 @@ public class ClienteUDP2 {
     String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
     System.out.println("Server response: " + receivedMessage);
     
-    
     clientSocket.close();
+    
+    
   }
 
 }

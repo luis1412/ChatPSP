@@ -22,7 +22,7 @@ public class ServidorUDP2 {
 
     public static void main(String args[]) throws Exception {
         DatagramSocket serverSocket = new DatagramSocket(9876);
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[4096];
 
         while (true) {
             DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
@@ -31,7 +31,7 @@ public class ServidorUDP2 {
             InetAddress clientAddress = receivePacket.getAddress();
             int clientPort = receivePacket.getPort();
 
-            String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
+            String receivedMessage = new String(receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8");
             
             if (receivedMessage.equalsIgnoreCase("REGISTER")) {
               
@@ -40,19 +40,21 @@ public class ServidorUDP2 {
                 DatagramPacket registrationAckPacket = new DatagramPacket(buffer, buffer.length, clientAddress, clientPort);
                 serverSocket.send(registrationAckPacket);
             } else {
-                    MulticastSocket ms = new MulticastSocket();
+                // Se escoge un puerto para el server
+                try (MulticastSocket ms = new MulticastSocket()) {
                     // Se escoge un puerto para el server
                     int puerto = 12345;
-            // Se escoge una dirección para el grupo
+                    // Se escoge una dirección para el grupo
                     InetAddress grupoMulticast = InetAddress.getByName("225.0.0.1");
                     String cadena = receivedMessage;
-                        System.out.print("Datos a enviar al grupo: ");
-            // Enviamos el mensaje a todos los clientes que se hayan unido al grupo
-                        DatagramPacket paquete = new DatagramPacket(cadena.getBytes(), cadena.length(), grupoMulticast, puerto);
-                        ms.send(paquete);
-            // Cerramos recursos
-                    ms.close();
+                    System.out.println(cadena);
+                    System.out.print("Datos a enviar al grupo: ");
+                    // Enviamos el mensaje a todos los clientes que se hayan unido al grupo
+                    DatagramPacket paquete = new DatagramPacket(cadena.getBytes(), cadena.length(), grupoMulticast, puerto);
+                    ms.send(paquete);
+                    // Cerramos recursos
                     System.out.println("Socket cerrado...");
+                }
                 }
     
             }

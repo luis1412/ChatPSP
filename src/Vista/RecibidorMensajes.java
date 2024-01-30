@@ -46,11 +46,11 @@ public class RecibidorMensajes extends Thread{
         while (true) {
             // El buffer se crea dentro del bucle para que se sobrescriba
             // con cada nuevo mensaje
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[4096];
             DatagramPacket paquete = new DatagramPacket(buf, buf.length);
             //Recibe el paquete del servidor multicast
             ms.receive(paquete);
-            msg = new String(paquete.getData());
+            msg = new String(paquete.getData(), 0, paquete.getLength());
             System.out.println("Recibo: " + msg.trim());
             
             int indiceSegundoCorchete = 0;

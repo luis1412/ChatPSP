@@ -6,13 +6,20 @@
 package Vista;
 
 import Servidor.ClienteUDP2;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -98,8 +105,18 @@ public class Interfaz extends javax.swing.JFrame {
         });
 
         botonImagen.setText("📷");
+        botonImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonImagenActionPerformed(evt);
+            }
+        });
 
         botonDocumento.setText("📔");
+        botonDocumento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDocumentoActionPerformed(evt);
+            }
+        });
 
         conversacion.setColumns(20);
         conversacion.setRows(5);
@@ -144,7 +161,7 @@ public class Interfaz extends javax.swing.JFrame {
     private void botonEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarActionPerformed
         escribirText("Tú", mensaje.getText(), true);
         try {
-            cliente.enviarMensaje("[" + nombreUsuario + " " + this.hora.toString()  + "]" + " " + mensaje.getText());
+           cliente.enviarMensaje("[" + nombreUsuario + " " + this.hora.toString()  + "]" + " " + mensaje.getText()); 
         } catch (IOException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -163,6 +180,43 @@ public class Interfaz extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_mensajeKeyPressed
+
+    private void botonImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonImagenActionPerformed
+            JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Choose Image");
+                int userSelection = fileChooser.showOpenDialog(this);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    escribirText("Tú", selectedFile.getAbsolutePath(), true);
+                try {
+                    cliente.enviarMensaje("[" + nombreUsuario + " " + this.hora.toString()  + "]" + " " + selectedFile.getAbsolutePath());
+                } catch (IOException ex) {
+                    Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                    try {
+                        Image img = ImageIO.read(selectedFile);
+                        JLabel label = new JLabel(new ImageIcon(img));
+                        JOptionPane.showMessageDialog(this, label, "Imagen", JOptionPane.PLAIN_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Error cargando la imagen: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+    }//GEN-LAST:event_botonImagenActionPerformed
+
+    private void botonDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDocumentoActionPerformed
+             JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Choose File");
+        int userSelection = fileChooser.showOpenDialog(this);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            escribirText("Tú", selectedFile.getAbsolutePath(), true);
+                try {
+                    cliente.enviarMensaje("[" + nombreUsuario + " " + this.hora.toString()  + "]" + " " + selectedFile.getAbsolutePath());
+                } catch (IOException ex) {
+                    Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
+    }//GEN-LAST:event_botonDocumentoActionPerformed
 
     /**
      * @param args the command line arguments
